@@ -10,14 +10,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <X11/Xlib.h>
 
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
-#include <gdk/gdkx.h>   /* GDK_WINDOW_XID / gdk_x11_window_foreign_new_for_display */
+#include <gdk/gdkx.h>
 
 int main(int argc, char **argv) {
-    /* --- Create a raw X11 window that will host the GTK/WebKit content --- */
+    char *uri = NULL;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--uri") == 0 && i + 1 < argc) {
+            uri = argv[i + 1];
+            break;
+        }
+    }
+
+    if (!uri) {
+        fprintf(stderr, "Usage: %s --uri <URI>\n", argv[0]);
+        return 1;
+    }
+
     Display *dpy = XOpenDisplay(NULL);
     if (!dpy) {
         fprintf(stderr, "Failed to open X display\n");
@@ -30,7 +43,7 @@ int main(int argc, char **argv) {
     int height = DisplayHeight(dpy, screen);
 
     XSetWindowAttributes swa;
-    swa.override_redirect = True; /* optional: prevents WM from decorating/managing it */
+    swa.override_redirect = True; /* prevents WM from decorating/managing it */
     Window xwin = XCreateWindow(
                       dpy, root,
                       0, 0, width, height, 0,
@@ -42,53 +55,43 @@ int main(int argc, char **argv) {
     XMapWindow(dpy, xwin);
     XFlush(dpy);
 
-    /* --- Init GTK and create a GtkWindow + WebKitWebView --- */
     gtk_init(&argc, &argv);
 
     GtkWidget *gtk_win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(gtk_win), width, height);
     gtk_window_set_decorated(GTK_WINDOW(gtk_win), FALSE); /* no frame */
 
-    /* Add a WebKitWebView to the GtkWindow */
     GtkWidget *webview = webkit_web_view_new();
     gtk_container_add(GTK_CONTAINER(gtk_win), webview);
 
-    /* Simple HTML */
-    webkit_web_view_load_uri(WEBKIT_WEB_VIEW(webview), "file:///home/keive/Projects/webkitbg/bgutils/index.html");
+    webkit_web_view_load_uri(WEBKIT_WEB_VIEW(webview), uri);
 
-    /* Realize the GtkWindow so its GdkWindow (X window) is created */
     gtk_widget_realize(gtk_win);
 
-    /* --- Wrap the raw X11 window as a GdkWindow and reparent the GTK window into it --- */
     GdkDisplay *gdk_display = gdk_display_get_default();
     if (!gdk_display) {
         fprintf(stderr, "gdk_display_get_default() failed\n");
         return 1;
     }
 
-    /* Wrap the existing X window into a GdkWindow */
     GdkWindow *parent_gdk = gdk_x11_window_foreign_new_for_display(gdk_display, xwin);
     if (!parent_gdk) {
         fprintf(stderr, "Failed to wrap X window as GdkWindow\n");
         return 1;
     }
 
-    /* Get the GtkWindow's GdkWindow (child) and reparent it */
     GdkWindow *child_gdk = gtk_widget_get_window(gtk_win);
     if (!child_gdk) {
         fprintf(stderr, "gtk_widget_get_window() returned NULL\n");
         return 1;
     }
 
-    /* Reparent the GTK window's GdkWindow into our wrapped X11 GdkWindow */
     gdk_window_reparent(child_gdk, parent_gdk, 0, 0);
     gdk_window_show(child_gdk);
 
-    /* Show widgets and enter GTK main loop */
     gtk_widget_show_all(gtk_win);
     gtk_main();
 
-    /* Cleanup (not usually reached because gtk_main() runs until quit) */
     XDestroyWindow(dpy, xwin);
     XCloseDisplay(dpy);
     return 0;
