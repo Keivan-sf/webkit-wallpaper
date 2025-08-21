@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/keive/Projects/webkitbg",
+  "command": "/nix/store/a0d7m3zn9p2dfa1h7ag9h2wzzr2w25sn-gcc-wrapper-14.2.1.20250322/bin/gcc  -I/nix/store/y0n9h3hcv2wfp2rv03ii862lhycx5wij-glib-2.84.3-dev/include/glib-2.0 -I/nix/store/y3nxdc2x8hwivppzgx5hkrhacsh87l21-glib-2.84.3/lib/glib-2.0/include -I/nix/store/9sjxbq6k58fcrxrjdi6wwdbxa2ivs4fg-gtk+3-3.24.49-dev/include/gtk-3.0 -I/nix/store/2h392fb5jsfzl2qj252g08qvmpnkg2j3-at-spi2-core-2.56.2-dev/include/atk-1.0 -I/nix/store/p4c8g2fhfabnkx8rm4ng8radkh83h7ba-cairo-1.18.2-dev/include/cairo -I/nix/store/w9qijf113qkgqcv54ydhbjh0rlslysbr-freetype-2.13.3-dev/include/freetype2 -I/nix/store/6bymzja2kc2kvpx8r8vhmgmj8g47p8ss-gdk-pixbuf-2.42.12-dev/include/gdk-pixbuf-2.0 -I/nix/store/kl2fls61zc1x8f8sknmf1axcg0sxaxa9-pango-1.56.3-dev/include/pango-1.0 -I/nix/store/yfrv3rw3w96wxvgfga55dpb291v2x7cl-harfbuzz-10.2.0-dev/include/harfbuzz -I/nix/store/2s1nn6iw29hy4f9nxgaskbi6p9hp0ans-webkitgtk-2.48.3+abi=4.0-dev/include/webkitgtk-4.0 -I/nix/store/ncqli6izilga7m31n07bp8wnaqja1b2r-libsoup-2.74.3-dev/include/libsoup-2.4 -std=gnu11 -o CMakeFiles/example.dir/webkit_embed2.c.o -c /home/keive/Projects/webkitbg/webkit_embed2.c",
+  "file": "/home/keive/Projects/webkitbg/webkit_embed2.c",
+  "output": "CMakeFiles/example.dir/webkit_embed2.c.o"
+}
+]
