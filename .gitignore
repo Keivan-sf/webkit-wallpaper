@@ -3,3 +3,5 @@ wrp2
 CMakeFiles
 .cache
 bgutils
+CMakeCache.txt
+result

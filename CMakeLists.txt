@@ -15,7 +15,7 @@ pkg_check_modules(GDK REQUIRED gdk-3.0)
 pkg_check_modules(X11 REQUIRED x11)
 
 # Add your executable
-add_executable(${PROJECT_NAME} webkit_embed2.c)
+add_executable(${PROJECT_NAME} webkit_rp2.c)
 
 # Set include directories
 target_include_directories(${PROJECT_NAME} PRIVATE
