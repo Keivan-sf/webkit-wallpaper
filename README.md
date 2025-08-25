@@ -11,3 +11,6 @@ After the build phase, use the command like below:
 ./webwp --uri "file:///home/username/index.html"
 ```
 Uri can be anything like `http://localhost:3000` or `https://google.com`
+
+> [!TIP]
+> If you get `Failed to create GBM buffer of size` try setting `WEBKIT_DISABLE_DMABUF_RENDERER=1`
